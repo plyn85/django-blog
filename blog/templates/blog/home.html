@@ -51,11 +51,7 @@
   >Next</a
 >
 <!-- if there where 30 pages this will say the page is equal to 30 -->
-<a
-  class="btn btn-outline-info mb-4"
-  href="?page={{page_obj.paginator.num_pages}}"
-  >Last</a
->
+<a class="btn mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
 {%endif%}
 <!-- end for -->
 {% endif %}
