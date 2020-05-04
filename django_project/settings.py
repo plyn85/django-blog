@@ -14,7 +14,7 @@ import os
 from configparser import RawConfigParser
 import django_heroku
 
-if config.get('development','DEVELOPMENT'):
+if os.environ.get('DEVELOPMENT'):
     development = True
 else:
     development = False
