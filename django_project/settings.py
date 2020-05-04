@@ -14,6 +14,11 @@ import os
 from configparser import RawConfigParser
 import django_heroku
 
+if config.get('development','DEVELOPMENT'):
+    development = True
+else:
+    development = False
+    # this allows enviroment variables Import    
 config = RawConfigParser()
 config.read('settings.ini')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -29,7 +34,7 @@ SECRET_KEY = config.get('secrets', 'SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['plyn85-blog-app']
+ALLOWED_HOSTS = ['ALLOWED_HOSTS']
 
 
 # Application definition
@@ -83,13 +88,15 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if development:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
-
+else:
+    DATABASES = {'default': dj_database_url.parse(config.get('database','DATABASE_URL'))}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
