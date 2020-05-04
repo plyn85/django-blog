@@ -13,14 +13,14 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from configparser import RawConfigParser
 import django_heroku
-
-if os.environ.get('DEVELOPMENT'):
+import dj_database_url
+config = RawConfigParser()
+config.read('settings.ini')
+if config.get('development','DEVELOPMENT'):
     development = True
 else:
     development = False
     # this allows enviroment variables Import    
-config = RawConfigParser()
-config.read('settings.ini')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -164,4 +164,4 @@ AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # this will automatically set a lot of configs for us
-django_project.settings(locals())
+django_heroku.settings(locals())
