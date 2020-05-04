@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from configparser import RawConfigParser
+import django_heroku
 
 config = RawConfigParser()
 config.read('settings.ini')
@@ -154,3 +155,6 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# this will automatically set a lot of configs for us
+django_project.settings(locals())
