@@ -12,15 +12,16 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from configparser import RawConfigParser
-import django_heroku
-import dj_database_url
 config = RawConfigParser()
 config.read('settings.ini')
+import django_heroku
+import dj_database_url
+    # this allows enviroment variables Import    
+
 if config.get('development','DEVELOPMENT'):
     development = True
 else:
     development = False
-    # this allows enviroment variables Import    
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
