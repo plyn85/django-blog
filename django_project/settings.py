@@ -11,14 +11,19 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-from configparser import RawConfigParser
-config = RawConfigParser()
-config.read('settings.ini')
+if os.path.exists("env.py"):
+    import env
+# from os import path
+# if path.exists("env.py"):
+#     import env
+# from configparser import RawConfigParser
+# config = RawConfigParser()
+# config.read('settings.ini')
 import django_heroku
 import dj_database_url
     # this allows enviroment variables Import    
 
-if config.get('development','DEVELOPMENT'):
+if os.environ.get('DEVELOPMENT'):
     development = True
 else:
     development = False
@@ -30,12 +35,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.get('secrets', 'SECRET_KEY')
+SECRET_KEY = ('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [config.get('database','ALLOWED_HOSTS')]
+ALLOWED_HOSTS = [os.environ.get('HOSTNAME','HEROKU_APP_NAME')]
 
 
 # Application definition
@@ -97,7 +102,7 @@ if development:
         }
     }
 else:
-    DATABASES = {'default': dj_database_url.parse(config.get('database','DATABASE_URL'))}
+    DATABASES = {'default': dj_database_url.config('DATABASE_URL')}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -147,22 +152,27 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_REDIRECT_URL = 'blog-home'
 # over riding deafult url path after a user trys to log In to a page he has no access to
 LOGIN_URL = 'login'
-
+AWS_S3_OBJECT_PARAMETERS = {
+   'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+   'CacheControl': 'max-age=94608000'
+}
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = config.get('email', 'EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config.get('email', 'EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
-AWS_ACCESS_KEY_ID = config.get('database', 'AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config.get('database', 'AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config.get('database', 'AWS_STORAGE_BUCKET_NAME')
-
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME ='eu-west-1'
+# This I needed Incasse a user upoloads a file with the same name as somebody else we dont want the file to be over written
 AWS_S3_FILE_OVERWRITE = False
+# might not need this with current versions of django storage
 AWS_DEFAULT_ACL = None
-
+# 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # this will automatically set a lot of configs for us
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

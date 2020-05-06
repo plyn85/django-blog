@@ -5,7 +5,7 @@ settings.ini
 __pycache__
 
 .vscode
-       
+  .env     
         .venv
         __pycache__
         venv/
@@ -150,3 +150,5 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/        
+/env.py
+/staticfiles
